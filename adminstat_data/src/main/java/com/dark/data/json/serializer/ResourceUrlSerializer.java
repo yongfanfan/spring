@@ -14,7 +14,7 @@ import com.dark.common.domain.Constants;
 public class ResourceUrlSerializer extends JsonSerializer<String> {
 
 	public static final Pattern URL_REG_PATTERN = Pattern
-			.compile("^http[s]?:\\/\\/([\\w-]+\\.)+[\\w-]+([\\w-./?%&=()]*)?$");
+			.compile("^http[s]?:\\/\\/([\\w-]+\\.)+[\\w-]+([\\w-./?%&=()]*)?$"); 
 
 	@Override
 	public void serialize(String value, JsonGenerator jgen,
