@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+	<description>Spring Security</description>
+
+	<!-- <sec:http pattern="/auth/token" create-session="stateless" authentication-manager-ref="clientAuthenticationManager"
+		entry-point-ref="clientAuthenticationEntryPoint">
+		<sec:intercept-url pattern="/auth/token" access="IS_AUTHENTICATED_FULLY" />
+		<sec:http-basic entry-point-ref="clientAuthenticationEntryPoint" />
+		<sec:custom-filter ref="clientTokenEndpointFilter" before="BASIC_AUTH_FILTER" />
+		<sec:access-denied-handler ref="clientAccessDeniedHandler" />
+	</sec:http>
+
+	<sec:http pattern="/**" create-session="never" entry-point-ref="clientAuthenticationEntryPoint"
+		authentication-manager-ref="resourceAuthenticationManager">
+		<sec:anonymous enabled="false" />
+		<sec:custom-filter ref="resourceAuthenticationProcessingFilter" before="PRE_AUTH_FILTER" />
+		<sec:access-denied-handler ref="clientAccessDeniedHandler" />
+	</sec:http> -->
+
+
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.access.vote.RoleVoter" />
+				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+				<bean class="org.springframework.security.access.prepost.PreInvocationAuthorizationAdviceVoter">
+					<constructor-arg>
+						<bean class="org.springframework.security.access.expression.method.ExpressionBasedPreInvocationAdvice"></bean>
+					</constructor-arg>
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- <sec:authentication-manager id="clientAuthenticationManager">
+		<sec:authentication-provider ref="userAuthenticationProvider" />
+	</sec:authentication-manager>
+
+
+	<sec:global-method-security pre-post-annotations="enabled" proxy-target-class="true"
+		authentication-manager-ref="resourceAuthenticationManager" access-decision-manager-ref="accessDecisionManager">
+	</sec:global-method-security> -->
+</beans>

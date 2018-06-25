@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd 
+	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.0.xsd">
+	<description>基础配置 </description>
+	<!-- 使用 annotation自动注册bean,并检查@Service, @Repository,@Component注解 -->
+	<context:component-scan base-package="com.dark">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+	    <property name="url" value="${jdbc.url}" />
+	    <property name="username" value="${jdbc.username}" /> 
+	    <!-- 密码可加密 -->
+	    <property name="password" value="${jdbc.password}" /> 
+	    <!-- 防SQL注入攻击 -->
+	    <property name="filters" value="wall"/>
+	    <!-- 开启统计监控信息 -->
+	    <!-- <property name="filters" value="wall,stat" /> -->
+	    <property name="proxyFilters">
+	        <list>
+	            <ref bean="stat-filter" />
+	        </list>
+	    </property>
+	    <property name="connectionProperties" value="druid.stat.mergeSql=true" />
+	 
+	    <property name="maxActive" value="20" />
+	    <property name="initialSize" value="1" />
+	    <property name="maxWait" value="60000" />
+	    <property name="minIdle" value="1" />
+	 
+	    <property name="timeBetweenEvictionRunsMillis" value="60000" />
+	    <property name="minEvictableIdleTimeMillis" value="300000" />
+	 
+	    <property name="validationQuery" value="SELECT 'x'" />
+	    <property name="testWhileIdle" value="true" />
+	    <property name="testOnBorrow" value="false" />
+	    <property name="testOnReturn" value="false" />
+	     
+	    <property name="poolPreparedStatements" value="true" />
+	    <property name="maxPoolPreparedStatementPerConnectionSize" value="50" />
+	    <!-- 合并多个DruidDataSource的监控数据 -->
+	    <!-- <property name="useGloalDataSourceStat" value="true" /> -->
+	</bean>
+	
+	<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<!-- 慢SQL记录,默认3秒，这里为1秒 -->
+	    <property name="slowSqlMillis" value="1000" />
+	    <property name="logSlowSql" value="true" />
+	</bean>
+	<!-- 资源文件加载 -->
+	
+	<!-- MyBatis配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+		<property name="typeAliasesPackage" value="com.dark.data.domain.**"></property>
+		<!-- 显式指定Mapper文件位置 -->
+		<property name="mapperLocations"
+			value="classpath:com/dark/data/persistence/**/*.xml"></property>
+		<property name="configurationProperties">
+			<util:properties>
+				<!-- 全局映射器启用缓存 -->
+				<prop key="cacheEnabled">true</prop>
+				<!-- 查询时，关闭关联对象即时加载以提高性能 -->
+				<prop key="lazyLoadingEnabled">false</prop>
+				<!-- 设置关联对象加载的形态，此处为按需加载字段(加载字段由SQL指 定)，不会加载关联表的所有字段，以提高性能 -->
+				<prop key="aggressiveLazyLoading">false</prop>
+				<!-- 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果 -->
+				<prop key="multipleResultSetsEnabled">true</prop>
+				<!-- 允许使用列标签代替列名 -->
+				<prop key="useColumnLabel">true</prop>
+				<!-- 允许使用自定义的主键值(比如由程序生成的UUID 32位编码作为键值)，数据表的PK生成策略将被覆盖 -->
+				<prop key="useGeneratedKeys">true</prop>
+				<!-- 给予被嵌套的resultMap以字段-属性的映射支持 -->
+				<prop key="autoMappingBehavior">FULL</prop>
+				<!-- 对于批量更新操作缓存SQL以提高性能 -->
+				<prop key="defaultExecutorType">BATCH</prop>
+				<!-- 数据库超过25000秒仍未响应则超时 -->
+				<prop key="defaultStatementTimeout">25000</prop>
+			</util:properties>
+		</property>
+		<property name="plugins">
+			<util:list>
+				<bean class="com.dark.common.jdbc.plugin.MybatisPaginationInterceptor">
+					<property name="properties">
+						<props>
+							<prop key="dialect">com.dark.common.jdbc.dialect.MySQLDialect</prop>
+						</props>
+					</property>
+				</bean>
+			</util:list>
+		</property>
+		<property name="typeHandlersPackage" value="com.dark.data.mybatis.type" />
+	</bean>
+	
+	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.dark.data.persistence" />
+		<property name="annotationClass" value="com.dark.data.annotation.MyBatisRepository"/>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<tx:advice id="transactionAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="insert*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="delete*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="do*" propagation="REQUIRED"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="select*" read-only="true" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config proxy-target-class="true">
+		<aop:pointcut id="txPointcutData" expression="execution(* com.dark.data.service.**.*(..))" />
+		<aop:pointcut id="txPointcutApi" expression="execution(* com.dark.api.service.**.*(..))" />
+		<aop:advisor pointcut-ref="txPointcutData" advice-ref="transactionAdvice" />
+		<aop:advisor pointcut-ref="txPointcutApi" advice-ref="transactionAdvice" />
+	</aop:config>
+	
+	<!-- 配置文件读取 -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:/config.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="configProperties" />
+    </bean>
+</beans>

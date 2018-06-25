@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dark.data.persistence.ActivityOptionsMapper" >
+  <resultMap id="BaseResultMap" type="com.dark.data.domain.ActivityOptions" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="activity_id" property="activityId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="thumb" property="thumb" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="item_type" property="itemType" jdbcType="CHAR" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, activity_id, name, content, thumb, quantity, item_type, summary
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_options
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from activity_options
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.dark.data.domain.ActivityOptions" >
+    insert into activity_options (id, activity_id, name, 
+      thumb, quantity, item_type, 
+      summary)
+    values (#{id,jdbcType=BIGINT}, #{activityId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{thumb,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{itemType,jdbcType=CHAR}, 
+      #{summary,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dark.data.domain.ActivityOptions" >
+    insert into activity_options
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="thumb != null" >
+        thumb,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="itemType != null" >
+        item_type,
+      </if>
+      <if test="summary != null" >
+        summary,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="activityId != null" >
+        #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="thumb != null" >
+        #{thumb,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="itemType != null" >
+        #{itemType,jdbcType=CHAR},
+      </if>
+      <if test="summary != null" >
+        #{summary,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dark.data.domain.ActivityOptions" >
+    update activity_options
+    <set >
+      <if test="activityId != null" >
+        activity_id = #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="thumb != null" >
+        thumb = #{thumb,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="itemType != null" >
+        item_type = #{itemType,jdbcType=CHAR},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dark.data.domain.ActivityOptions" >
+    update activity_options
+    set activity_id = #{activityId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      thumb = #{thumb,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      item_type = #{itemType,jdbcType=CHAR},
+      summary = #{summary,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Select_Where_Clause" >
+    <if test="id != null" >
+       and id = #{id,jdbcType=BIGINT}
+    </if>
+    <if test="activityId != null" >
+       and activity_id = #{activityId,jdbcType=BIGINT}
+    </if>
+    <if test="name != null" >
+       and name = #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="thumb != null" >
+       and thumb = #{thumb,jdbcType=VARCHAR}
+    </if>
+    <if test="quantity != null" >
+       and quantity = #{quantity,jdbcType=INTEGER}
+    </if>
+    <if test="itemType != null" >
+       and item_type = #{itemType,jdbcType=CHAR}
+    </if>
+    <if test="summary != null" >
+       and summary = #{summary,jdbcType=VARCHAR}
+    </if>
+  </sql>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.dark.data.domain.ActivityOptions" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_options
+    <if test="_parameter != null" >
+      <where >
+        <include refid="Select_Where_Clause" />
+      </where>
+    </if>
+  </select>
+</mapper>

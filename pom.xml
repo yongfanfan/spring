@@ -1,0 +1,569 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.dark</groupId>
+  <artifactId>AdminStat</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <name>AdminStat</name>
+   <properties>
+		<!-- 主要依赖库的版本定义 -->
+		<spring.version>4.0.1.RELEASE</spring.version>
+		<junit.version>4.11</junit.version>
+		<mybatis.version>3.2.4</mybatis.version>
+		<commons-lang3.version>3.2.1</commons-lang3.version>
+		<commons-io.version>2.4</commons-io.version>
+		<slf4j.version>1.7.6</slf4j.version>
+		<logback.version>1.1.2</logback.version>
+		<aspectj.version>1.7.3</aspectj.version>
+		<guava.version>16.0.1</guava.version>
+		<shiro.version>1.2.2</shiro.version>
+		<dozer.version>5.4.0</dozer.version>
+		<poi.version>3.8</poi.version>
+		<spring.security.version>3.2.4.RELEASE</spring.security.version>
+		<druid-version>1.0.9</druid-version>
+
+		<!-- Plugin的属性 -->
+		<maven.tomcat.uriEncoding>UTF-8</maven.tomcat.uriEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<maven.test.skip>true</maven.test.skip>
+		<maven.test.failure.ignore>true</maven.test.failure.ignore>
+		<maven.compiler.fork>true</maven.compiler.fork>
+
+		<!-- 公共变量属性 -->
+		<partner.id>1102224</partner.id>
+		<ticket.host>http://115.29.210.40:9595/lottery/</ticket.host>
+		<ticket.access_key>938AE89AC1C54D66A11F8C19E053B715</ticket.access_key>
+		<ticket.access_secret>D11313B59F954C83B004475E97445B14</ticket.access_secret>
+	</properties>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>Codehaus repository</id>
+			<url>http://repository.codehaus.org/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>maven-db-plugin-repo</id>
+			<name>maven db plugin repository</name>
+			<url>https://maven-db-plugin.googlecode.com/svn/maven/repo</url>
+			<layout>default</layout>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<profiles>
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- basic config -->
+				<shake.isDebug>true</shake.isDebug>
+				<shake.resourceRootPath>/usr/local/bin/tomcat/webapps/images/</shake.resourceRootPath>
+				<shake.resourceRootUrl>http://111.75.166.181/images/</shake.resourceRootUrl>
+				<!-- db server -->
+				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+				<!-- <jdbc.url><![CDATA[jdbc:mysql://rdsis954o01xn4ab4kd0.mysql.rds.aliyuncs.com:3306/xdbpp?useUnicode=true&amp;characterEncoding=utf-8]]></jdbc.url>
+				<jdbc.username>cloudlifecd</jdbc.username>
+				<jdbc.password>CL2014yunHUO</jdbc.password>  -->
+				 <jdbc.url><![CDATA[jdbc:mysql://192.168.1.98:3306/xdbpp?useUnicode=true&amp;characterEncoding=utf-8]]></jdbc.url>
+				<jdbc.username>root</jdbc.username>
+				<jdbc.password>123456</jdbc.password> 
+				<!-- redis server -->
+				<redis.master.host>127.0.0.1</redis.master.host>
+				<redis.master.password>shyunHUO2015</redis.master.password>
+				<!-- weichat -->
+				<weichat.appid>wx58982b4da4f82db1</weichat.appid>
+				<weichat.appsecret>a00db90825da722beccc24c3e7588ca6</weichat.appsecret>
+				<callbackurl>http://office.huo.so:9999</callbackurl>
+				<!-- 流米 -->
+				<liumi.host>http://yfbapi.liumi.com</liumi.host>
+				<liumi.appkey>PXpNNcRmlu</liumi.appkey>
+				<liumi.appsecret>QKoZ8HaXD4wbL4LC</liumi.appsecret>
+				<!-- 统计 -->
+				<tongji.host.http>http://192.168.1.88:8080</tongji.host.http>
+				<tongji.host.https>http://192.168.1.88:8080</tongji.host.https>
+			</properties>
+		</profile>
+		<profile>
+			<id>release</id>
+			<properties>
+				<!-- basic config -->
+				<shake.isDebug>false</shake.isDebug>
+				<shake.resourceRootPath>/var/www/resource/images/</shake.resourceRootPath>
+				<shake.resourceRootUrl>http://111.75.166.181/images/</shake.resourceRootUrl>
+				<!-- db server -->
+				<jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+				<jdbc.url><![CDATA[jdbc:mysql://luketvdb.mysql.rds.aliyuncs.com:3306/xdbpp?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true]]></jdbc.url>
+				<jdbc.username>luketv</jdbc.username>
+				<jdbc.password>shyunHUO2014</jdbc.password>
+				<!-- redis server -->
+				<redis.master.host>10.160.32.58</redis.master.host>
+				<redis.master.password>shyunHUO2015</redis.master.password>
+				<!-- weichat -->
+				<weichat.appid>wx7aff06d94a81b651</weichat.appid>
+				<weichat.appsecret>5c936e9de7a00ab9ad50981fc9470d06</weichat.appsecret>
+				<callbackurl>https://prod.huo.so</callbackurl>
+				<!-- 流米 -->
+				<liumi.host>http://api.tenchang.com</liumi.host>
+				<liumi.appkey>ydDlnIZFLW</liumi.appkey>
+				<liumi.appsecret>u6uz4kA4X8mxbqUB</liumi.appsecret>
+				<!-- 统计 -->
+				<tongji.host.http>http://dev02.huo.so:5555</tongji.host.http>
+				<tongji.host.https>https://dev02.huo.so</tongji.host.https>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- 自建工程 -->
+			<dependency>
+				<groupId>com.dark</groupId>
+				<artifactId>adminstat_data</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.dark</groupId>
+				<artifactId>adminstat_common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<!-- spring -->
+			<!-- 纯粹为了exclude commons-loging -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.json-lib</groupId>
+				<artifactId>json-lib</artifactId>
+				<version>2.4</version>
+				<classifier>jdk15</classifier>
+			</dependency>
+			<!-- aop -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>${aspectj.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- mybatis -->
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis</artifactId>
+				<version>${mybatis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mybatis</groupId>
+				<artifactId>mybatis-spring</artifactId>
+				<version>1.2.2</version>
+			</dependency>
+			<!-- LOGGING begin -->
+			<!-- slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<!-- logback -->
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+
+			<!-- 代码直接调用log4j会被桥接到slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>log4j-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<!-- 代码直接调用commons-logging会被桥接到slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<!-- log4jdbc -->
+			<dependency>
+				<groupId>com.googlecode.log4jdbc</groupId>
+				<artifactId>log4jdbc</artifactId>
+				<version>1.2</version>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- LOGGING end -->
+			<!-- GENERAL UTILS begin -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.9</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>1.2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.9.1</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<!-- j2ee web spec -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>2.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- WEB end -->
+
+			<!-- google java library -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+
+			<!-- SECURITY begin -->
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-core</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-ehcache</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<!-- SECURITY end -->
+
+			<!-- druid连接池 -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>druid</artifactId>
+				<version>${druid-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>5.1.9</version>
+			</dependency>
+
+			<!-- jackson -->
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-core-asl</artifactId>
+				<version>1.9.12</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-jaxrs</artifactId>
+				<version>1.9.12</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>1.9.12</version>
+			</dependency>
+			<!-- jackson end -->
+
+			<!-- pojo copy -->
+			<dependency>
+				<groupId>net.sf.dozer</groupId>
+				<artifactId>dozer</artifactId>
+				<version>${dozer.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<!-- JSR303 Bean Validator -->
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>5.0.2.Final</version>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.2.3</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpmime</artifactId>
+				<version>4.2.2</version>
+			</dependency>
+
+			<!-- 云服务 -->
+			<dependency>
+				<groupId>com.aliyun.openservices</groupId>
+				<artifactId>aliyun-openservices</artifactId>
+				<version>1.2.3</version>
+			</dependency>
+
+			<!-- NOSQL begin -->
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				<version>2.4.2</version>
+			</dependency>
+			<!-- NOSQL end -->
+
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<showWarnings>true</showWarnings>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<!-- dependency相关插件 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.8</version>
+				</plugin>
+				<!-- war打包插件, 设定war包名称不带版本号 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<warName>${project.name}</warName>
+						<packagingExcludes>WEB-INF/classes/javac.bat,WEB-INF/classes/org.*</packagingExcludes>
+					</configuration>
+				</plugin>
+				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>1.3.1</version>
+					<executions>
+						<execution>
+							<id>enforce-banned-dependencies</id>
+							<goals>
+								<goal>enforce</goal>
+							</goals>
+							<configuration>
+								<rules>
+									<requireMavenVersion>
+										<version>3.0.3</version>
+									</requireMavenVersion>
+									<requireJavaVersion>
+										<version>1.8</version>
+									</requireJavaVersion>
+									<bannedDependencies>
+										<searchTransitive>true</searchTransitive>
+										<excludes>
+											<exclude>aspectj:aspectj*</exclude>
+											<exclude>org.springframework</exclude>
+										</excludes>
+										<includes>
+											<include>org.springframework:*:4.0.*</include>
+										</includes>
+									</bannedDependencies>
+								</rules>
+								<fail>true</fail>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- tomcat插件 -->
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.2</version>
+					<executions>
+						<execution>
+							<id>start-tomcat</id>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<fork>true</fork>
+							</configuration>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>mysql</groupId>
+							<artifactId>mysql-connector-java</artifactId>
+							<version>5.1.9</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+
+				<!-- mybatis生成mapper和bean的插件 -->
+				<plugin>
+					<groupId>org.mybatis.generator</groupId>
+					<artifactId>mybatis-generator-maven-plugin</artifactId>
+					<version>1.3.1</version>
+					<dependencies>
+						<dependency>
+							<groupId>mysql</groupId>
+							<artifactId>mysql-connector-java</artifactId>
+							<version>5.1.9</version>
+						</dependency>
+						<dependency>
+							<groupId>com.dark</groupId>
+							<artifactId>mybatis-generator</artifactId>
+							<version>1.0.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+  <modules>
+    <module>adminstat_data</module>
+  	<module>adminstat_common</module>
+  	<module>adminstat_api</module>
+  </modules>
+  
+</project>
