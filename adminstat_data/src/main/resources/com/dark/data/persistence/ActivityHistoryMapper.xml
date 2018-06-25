@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dark.data.persistence.ActivityHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.dark.data.domain.ActivityHistory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="activity_id" property="activityId" jdbcType="BIGINT" />
+    <result column="source" property="source" jdbcType="CHAR" />
+    <result column="item_type" property="itemType" jdbcType="CHAR" />
+    <result column="out_id" property="outId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, activity_id, source, item_type, out_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_history
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from activity_history
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.dark.data.domain.ActivityHistory" >
+    insert into activity_history (id, user_id, activity_id, 
+      source, item_type, out_id, create_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{activityId,jdbcType=BIGINT}, 
+      #{source,jdbcType=CHAR}, #{itemType,jdbcType=CHAR}, #{outId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.dark.data.domain.ActivityHistory" >
+    insert into activity_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="itemType != null" >
+        item_type,
+      </if>
+      <if test="outId != null" >
+        out_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="activityId != null" >
+        #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=CHAR},
+      </if>
+      <if test="itemType != null" >
+        #{itemType,jdbcType=CHAR},
+      </if>
+      <if test="outId != null" >
+        #{outId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dark.data.domain.ActivityHistory" >
+    update activity_history
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="activityId != null" >
+        activity_id = #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=CHAR},
+      </if>
+      <if test="itemType != null" >
+        item_type = #{itemType,jdbcType=CHAR},
+      </if>
+      <if test="outId != null" >
+        out_id = #{outId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dark.data.domain.ActivityHistory" >
+    update activity_history
+    set user_id = #{userId,jdbcType=BIGINT},
+      activity_id = #{activityId,jdbcType=BIGINT},
+      source = #{source,jdbcType=CHAR},
+      item_type = #{itemType,jdbcType=CHAR},
+      out_id = #{outId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Select_Where_Clause" >
+    <if test="id != null" >
+       and id = #{id,jdbcType=BIGINT}
+    </if>
+    <if test="userId != null" >
+       and user_id = #{userId,jdbcType=BIGINT}
+    </if>
+    <if test="activityId != null" >
+       and activity_id = #{activityId,jdbcType=BIGINT}
+    </if>
+    <if test="source != null" >
+       and source = #{source,jdbcType=CHAR}
+    </if>
+    <if test="itemType != null" >
+       and item_type = #{itemType,jdbcType=CHAR}
+    </if>
+    <if test="outId != null" >
+       and out_id = #{outId,jdbcType=BIGINT}
+    </if>
+    <if test="createTime != null" >
+       and create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+  </sql>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.dark.data.domain.ActivityHistory" >
+    select 
+    <include refid="Base_Column_List" />
+    from activity_history
+    <if test="_parameter != null" >
+      <where >
+        <include refid="Select_Where_Clause" />
+      </where>
+    </if>
+  </select>
+  <!--  -->
+   <select id="selectAll" resultType="map">
+    select 'TRAFFIC' as 'award_type' ,toder.create_time,toder.phone,toder.`status`,u.nickname,ah.source
+			from traffic_order toder 
+			left join `user` u on toder.user_id=u.id
+			left join activity_history ah on ah.out_id= toder.id
+			where toder.activity_id=(select id from activity where external_key=#{rid})
+   <if test="phone != ''" > and toder.phone=#{phone}</if>
+   <if test="username != ''" > and u.nickname=#{username}</if>
+   <if test="status != ''" > and toder.`status`=#{status} </if>
+   union
+   select 'ENTITY' ,eo.create_time,eo.phone,eo.`status`,u.nickname,ah.source
+			from entity_order eo 
+			left join `user` u on u.id=eo.user_id 
+			left join activity_history ah on ah.out_id= eo.id
+		where eo.activity_id=(select id from activity where external_key=#{rid})
+   <if test="phone != ''" > and eo.phone=#{phone}</if>
+   <if test="username != ''" > and u.nickname=#{username}</if>
+   <if test="status != ''" > and eo.`status`=#{status} </if> 
+  </select>
+  <select id="selectByTraff" resultType="map">
+   select 'TRAFFIC' as 'award_type',toder.create_time,toder.phone,toder.`status`,ah.nickname,ah.source
+	from traffic_order toder 
+	left join (select h.source,u.`nickname`  as nickname,h.`out_id` from activity_history  h left join `user` u on h.`user_id` =u.`id`  where h.`activity_id` =#{activityId} and h.`item_type` ='TRAFFIC') ah on ah.`out_id` =toder.`id`
+	where toder.`activity_id` =#{activityId}
+   <if test="phone != ''" > and toder.phone=#{phone} </if>
+    <if test="status != ''" > and toder.`status`=#{status} </if>
+    <if test="username != ''" > and ah.nickname=#{username}</if>
+    ORDER BY toder.create_time DESC
+    limit #{pageNo},#{pageSize}
+  </select>
+ 
+  <select id="selectByEntity" resultType="map">
+    select 'ENTITY'  as 'award_type',eo.create_time,eo.phone,eo.`status`,ah.nickname,ah.source,eo.address,eo.contact
+from entity_order eo 
+left join (select h.source,u.`nickname`  as nickname,h.`out_id` from activity_history  h left join `user` u on h.`user_id` =u.`id`  where h.`activity_id` =#{activityId} and h.`item_type` ='ENTITY') ah on ah.`out_id` =eo.`id`
+	where eo.`activity_id` =#{activityId}
+   <if test="phone != ''" > and eo.phone=#{phone}  </if>
+    <if test="status != ''" > and eo.`status`=#{status} </if>
+    <if test="username != ''" > and ah.nickname=#{username} </if>
+    ORDER BY eo.create_time DESC
+    limit #{pageNo},#{pageSize}
+  </select>
+  <select id="selectByTraffcount" resultType="Integer">
+  select count(1) from traffic_order torder
+LEFT JOIN activity_history ah ON ah.out_id=torder.id
+LEFT JOIN `user` u ON u.id=torder.user_id
+where torder.activity_id=#{id} and ah.item_type='TRAFFIC'
+   <if test="phone != ''" > and torder.phone=#{phone}  </if>
+    <if test="status != ''" > and torder.`status`=#{status} </if>
+    <if test="username != ''" > and u.nickname=#{username} </if>
+    ORDER BY ah.create_time DESC
+  </select>
+  <select id="selectByEntitycount" resultType="Integer">
+  select count(1) from entity_order torder
+LEFT JOIN activity_history ah ON ah.out_id=torder.id
+LEFT JOIN `user` u ON u.id=torder.user_id
+where torder.activity_id=#{id} and ah.item_type='ENTITY'
+   <if test="phone != ''" > and torder.phone=#{phone}  </if>
+    <if test="status != ''" > and torder.`status`=#{status} </if>
+    <if test="username != ''" > and u.nickname=#{username} </if>
+    ORDER BY ah.create_time DESC
+  </select>
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dark.data.persistence.TrafficOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.dark.data.domain.TrafficOrder" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="activity_id" property="activityId" jdbcType="BIGINT" />
+    <result column="postpackage" property="postpackage" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="flow_no" property="flowNo" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="network" property="network" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, activity_id, postpackage, phone, status, flow_no, create_time, receive_time,remark,network,province
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from `traffic_order`
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from `traffic_order`
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.dark.data.domain.TrafficOrder" >
+    insert into `traffic_order` (id, user_id, postpackage, 
+      phone, status, flow_no, 
+      create_time, receive_time)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{postpackage,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{flowNo,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{receiveTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.dark.data.domain.TrafficOrder" >
+    insert into `traffic_order`
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="activityId != null" >
+        activity_id,
+      </if>
+      <if test="postpackage != null" >
+        postpackage,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="flowNo != null" >
+        flow_no,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="receiveTime != null" >
+        receive_time,
+      </if>
+       <if test="remark != null" >
+        remark,
+      </if>
+       <if test="network != null" >
+        network,
+      </if>
+       <if test="province != null" >
+        province,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="activityId != null" >
+        #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="postpackage != null" >
+        #{postpackage,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="flowNo != null" >
+        #{flowNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveTime != null" >
+        #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="network != null" >
+        #{network,jdbcType=VARCHAR},
+      </if>
+       <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    <selectKey keyProperty="id" resultType="long">
+        select LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.dark.data.domain.TrafficOrder" >
+    update `traffic_order`
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="postpackage != null" >
+        postpackage = #{postpackage,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="flowNo != null" >
+        flow_no = #{flowNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveTime != null" >
+        receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+       remark = #{remark,jdbcType=VARCHAR},
+      </if>
+       <if test="network != null" >
+       network = #{network,jdbcType=VARCHAR},
+      </if>
+       <if test="province != null" >
+       province = #{province,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.dark.data.domain.TrafficOrder" >
+    update `traffic_order`
+    set user_id = #{userId,jdbcType=BIGINT},
+      postpackage = #{postpackage,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      flow_no = #{flowNo,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      receive_time = #{receiveTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Select_Where_Clause" >
+    <if test="id != null" >
+       and id = #{id,jdbcType=BIGINT}
+    </if>
+    <if test="userId != null" >
+       and user_id = #{userId,jdbcType=BIGINT}
+    </if>
+    <if test="postpackage != null" >
+       and postpackage = #{postpackage,jdbcType=VARCHAR}
+    </if>
+    <if test="phone != null" >
+       and phone = #{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="status != null" >
+       and status = #{status,jdbcType=CHAR}
+    </if>
+    <if test="flowNo != null" >
+       and flow_no = #{flowNo,jdbcType=VARCHAR}
+    </if>
+    <if test="createTime != null" >
+       and create_time = #{createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="receiveTime != null" >
+       and receive_time = #{receiveTime,jdbcType=TIMESTAMP}
+    </if>
+  </sql>
+  <select id="selectBySelective" resultMap="BaseResultMap" parameterType="com.dark.data.domain.TrafficOrder" >
+    select 
+    <include refid="Base_Column_List" />
+    from `traffic_order`
+    <if test="_parameter != null" >
+      <where >
+        <include refid="Select_Where_Clause" />
+      </where>
+    </if>
+  </select>
+</mapper>

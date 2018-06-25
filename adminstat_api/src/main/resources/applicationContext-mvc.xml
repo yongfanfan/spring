@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd 
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.dark.api.controller" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	</context:component-scan>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.dark.api.interceptor.CommonInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- JSR303 Validator定义 -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass"  value="org.hibernate.validator.HibernateValidator"/>  
+        <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->  
+        <property name="validationMessageSource" ref="messageSource"/>
+	</bean>
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="basename" value="classpath:jsr303" />
+		<property name="cacheSeconds" value="120"/>
+	</bean>
+	<!-- 自定义消息转换器 -->
+	<bean id="mappingJacksonHttpMessageConverter" class="com.dark.common.json.JacksonObjectMapperHttpMessageConvert" />
+	<bean id="stringMessageConvert" class="org.springframework.http.converter.StringHttpMessageConverter"></bean>
+	
+	<!-- 异常处理 start -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
+		<property name="order" value="0"></property>
+		<property name="messageConverters">
+			<util:list>
+				<ref bean="stringMessageConvert" />
+				<ref bean="mappingJacksonHttpMessageConverter" />
+			</util:list>
+		</property>
+	</bean>
+	<!-- 自定义异常 -->
+	<bean class="com.dark.api.exception.handler.RestApiExceptionResolver">
+		<property name="order" value="1"></property>
+	</bean>
+	<!-- 异常处理 end -->
+	
+	<!-- 开启支持@Controller和 @RequestMapping注解的处理器  start-->
+	<!-- <mvc:annotation-driven /> 是一种简写形式,会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter两个bean -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+	
+	<!-- 带数据格式化支持的类型转换服务实现,可通过实现Converter<S, T>来自定义，如下使用Spring内建的类型转换器-->
+	<!-- 默认使用DefaultFormattingConversionService转换器服务实现 -->
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+	<!-- 通过ConfigurableWebBindingInitializer绑定初始化器进行ConversionService的注册 -->
+	<bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		<property name="conversionService" ref="conversionService">
+		</property>
+		<property name="validator" ref="validator"></property>
+	</bean>
+	
+	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"> -->
+	<bean class="com.dark.api.mvc.adapter.CustomRequestMappingHandlerAdapter">
+		<!-- 注册ConfigurableWebBindingInitializer到RequestMappingHandlerAdapter -->
+		<property name="webBindingInitializer" ref="webBindingInitializer"></property>
+		<property name="messageConverters">
+			<util:list>
+				<ref bean="stringMessageConvert" />
+				<ref bean="mappingJacksonHttpMessageConverter" />
+			</util:list>
+		</property>
+	</bean>
+	<!-- 开启支持@Controller和 @RequestMapping注解的处理器  end-->
+	
+	<!-- 处理多文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="209715200" />
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<property name="maxInMemorySize" value="1024"></property>
+	</bean>
+	<!-- SpringMVC在超出上传文件限制时，会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->  
+    <!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的，而且此时还没有进入到Controller方法中 -->  
+    <bean id="exceptionResolver"  
+        class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+        <property name="exceptionMappings">  
+            <props>  
+                <!-- 遇到MaxUploadSizeExceededException异常时，自动跳转到/WEB-INF/jsp/error_fileupload.jsp页面 -->  
+                <prop  
+                    key="org.springframework.web.multipart.MaxUploadSizeExceededException">error_fileupload</prop>  
+            </props>  
+        </property>  
+    </bean>
+    
+    <!-- web start -->
+    <!-- 定义JSP文件的位置 -->  
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->
+	<!-- 也可用<mvc:resources> 二选一 -->
+	<mvc:default-servlet-handler/>
+	<!-- 静态资源 -->
+	<!-- <mvc:resources location="/static/" mapping="/static/**"/> -->
+	<!-- web end -->
+</beans>

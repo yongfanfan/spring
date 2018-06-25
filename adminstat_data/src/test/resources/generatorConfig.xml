@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<context id="oauth2" targetRuntime="MyBatis3">
+		<plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+		<plugin
+			type="com.dark.mybatis.generator.SelectBySelectivePlugin">
+		</plugin>
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<jdbcConnection driverClass="${jdbc.driverClassName}"
+			connectionURL="${jdbc.url}" userId="${jdbc.username}" password="${jdbc.password}" />
+		<javaModelGenerator targetPackage="com.dark.data.domain"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="false" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<sqlMapGenerator targetPackage="com.dark.data.persistence"
+			targetProject="src/main/resources">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+		<javaClientGenerator targetPackage="com.dark.data.persistence"
+			targetProject="src/main/java" type="XMLMAPPER">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+		<!-- <table tableName="sys_user" domainObjectName="User" -->
+		<!-- enableCountByExample="false" enableDeleteByExample="false" -->
+		<!-- enableSelectByExample="false" enableUpdateByExample="false" -->
+		<!-- modelType="flat" enableDeleteByPrimaryKey="true" enableInsert="true" -->
+		<!-- enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"> -->
+		<!-- </table> -->
+
+		<!-- <table tableName="sys_user_attr" domainObjectName="UserAttr" -->
+		<!-- enableCountByExample="false" enableDeleteByExample="false" -->
+		<!-- enableSelectByExample="false" enableUpdateByExample="false" -->
+		<!-- modelType="flat" enableDeleteByPrimaryKey="true" enableInsert="true" -->
+		<!-- enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"> -->
+		<!-- </table> -->
+
+		<!-- <table tableName="sys_resource" domainObjectName="Resource" -->
+		<!-- enableCountByExample="false" enableDeleteByExample="false" -->
+		<!-- enableSelectByExample="false" enableUpdateByExample="false" -->
+		<!-- modelType="flat" enableDeleteByPrimaryKey="true" enableInsert="true" -->
+		<!-- enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"> -->
+		<!-- </table> -->
+
+		<!-- <table tableName="con_node" domainObjectName="Node" -->
+		<!-- enableCountByExample="false" enableDeleteByExample="false" -->
+		<!-- enableSelectByExample="false" enableUpdateByExample="false" -->
+		<!-- modelType="flat" enableDeleteByPrimaryKey="true" enableInsert="true" -->
+		<!-- enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"> -->
+		<!-- </table> -->
+
+		<!-- <table tableName="con_comment" domainObjectName="Comment" -->
+		<!-- enableCountByExample="false" enableDeleteByExample="false" -->
+		<!-- enableSelectByExample="false" enableUpdateByExample="false" -->
+		<!-- modelType="flat" enableDeleteByPrimaryKey="true" enableInsert="true" -->
+		<!-- enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"> -->
+		<!-- </table> -->
+
+		<!-- <table tableName="sm_business" domainObjectName="Business" -->
+		<!-- enableCountByExample="false" enableDeleteByExample="false" -->
+		<!-- enableSelectByExample="false" enableUpdateByExample="false" -->
+		<!-- modelType="flat" enableDeleteByPrimaryKey="true" enableInsert="true" -->
+		<!-- enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"> -->
+		<!-- </table> -->
+		<!-- <table tableName="sys_version" domainObjectName="Version" -->
+		<!-- enableCountByExample="false" enableDeleteByExample="false" -->
+		<!-- enableSelectByExample="false" enableUpdateByExample="false" -->
+		<!-- modelType="flat" enableDeleteByPrimaryKey="true" enableInsert="true" -->
+		<!-- enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"> -->
+		<!-- </table> -->
+
+
+		<table tableName="activity_trace" domainObjectName="ActivityTrace"
+			enableCountByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" enableUpdateByExample="false"
+			modelType="flat" enableDeleteByPrimaryKey="true" enableInsert="true"
+			enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true">
+		</table>
+		
+	</context>
+</generatorConfiguration>
